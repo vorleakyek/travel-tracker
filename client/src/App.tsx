@@ -1,35 +1,48 @@
 import { useEffect, useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import Tabs from './components/Tabs';
+import CountryInput from './components/CountryInput';
+import Map from './components/Map';
+import TotalCountries from './components/TotalCountries';
+import {get} from './util/http';
 import './App.css';
 
+type RawDataUser = {
+  id: string;
+  color: string;
+  name: string;
+}
+
 export default function App() {
-  const [serverData, setServerData] = useState('');
+  const [users, setUsers] = useState<RawDataUser[]>();
 
   useEffect(() => {
-    async function readServerData() {
-      const resp = await fetch('/api/hello');
-      const data = await resp.json();
+    async function fetchUsersData() {
+      const data = await get('/api/users') as RawDataUser[];
+      setUsers(data)
 
-      console.log('Data from server:', data);
-
-      setServerData(data.message);
+      //sample code
+      // const blogPosts: BlogPost[] = data.map((rawPost) => {
+      //   return {
+      //     id: rawPost.id,
+      //     title: rawPost.title,
+      //     text: rawPost.body,
+      //   };
+      // });
     }
 
-    readServerData();
+    fetchUsersData();
   }, []);
 
+    //pass Users data to the Tabs components
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div >
+        <Tabs />
+        <CountryInput/>
+        <Map/>
+        <TotalCountries />
       </div>
-      <h1>{serverData}</h1>
+
     </>
   );
 }
