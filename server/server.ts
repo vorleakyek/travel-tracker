@@ -2,7 +2,7 @@
 import 'dotenv/config';
 import express from 'express';
 import pg from 'pg';
-import { ClientError, errorMiddleware } from './lib/index.js';
+import { ClientError, authMiddleware, errorMiddleware } from './lib/index.js';
 
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
@@ -22,8 +22,17 @@ app.use(express.static(reactStaticDir));
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
-app.get('/api/hello', (req, res) => {
-  res.json({ message: 'Hello, World!' });
+app.get('/api/users', async(req, res, next)=> {
+  try {
+    const sql = `
+      select * from "users"
+    `;
+
+    const result = await db.query(sql);
+    res.status(201).json(result.rows);
+  } catch (err) {
+    next(err);
+  }
 });
 
 /*
