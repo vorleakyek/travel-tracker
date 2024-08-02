@@ -1,29 +1,19 @@
 import { useContext, useReducer, useState } from 'react';
 import { AppContext } from './AppContext';
-import { User } from '../App';
+import type { CurrentUser } from '../App';
 
-export default function tabs() {
+export default function Tabs() {
 
-  const {users} = useContext(AppContext);
-  const initial = users ? users[0] : undefined;
-  console.log('current', users[0])
-  const [currentUser, setCurrentUser] = useState<User | undefined>(initial);
+  const {currentUserData} = useContext(AppContext);
 
-  // console.log('users', currentUser);
-
+  // const initial = currentUserData ? users[0] : undefined;
+  // console.log('current', users)
   return (
     <>
-      <form className="tab-view tab-view-height-auto">
-        {users?.map(user => (
-          <>
-            <input key={Math.random()} type="submit" id={user.id} />
-            <label key={Math.random()} htmlFor={user.id} style={{ backgroundColor: `${user.color}`}}>{user.name} </label>
-          </>
+        {currentUserData?.allUsers?.map(user => (
+          <button key={user.id} style={{backgroundColor: user.color}} onClick={() => console.log(user.name)}>{user.name}</button>
         ))}
-
-        <input key={Math.random()} type="submit" id="tab" />
-        <label key={Math.random()} htmlFor="tab">Add a Member</label>
-      </form>
+        <button style={{backgroundColor: 'lightgray'}}>Add a Member</button>
     </>
   )
 };

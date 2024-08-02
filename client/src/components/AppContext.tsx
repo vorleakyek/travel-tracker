@@ -1,5 +1,5 @@
 import {ReactNode, createContext} from 'react';
-import type {User} from '../App';
+import type {CurrentUser} from '../App';
 
 // type ContextProviderProps = {
 //   children: ReactNode;
@@ -14,9 +14,11 @@ import type {User} from '../App';
 // }
 
 type AppContextValues = {
-  users: User[] | undefined;
+  currentUserData: CurrentUser | undefined;
+  currentUserId: number | undefined;
 }
 
 export const AppContext = createContext<AppContextValues>({
-  users: undefined
+  currentUserData: undefined,
+  currentUserId: undefined
 })
